@@ -26,7 +26,6 @@ import asyncio
 
 _FALLBACKS = [
     "https://hst.sh/"
-    "https://mystb.in",
     "https://hastebin.com",
     "https://haste.unbelievaboat.com",
     "https://paste.pythondiscord.com"
@@ -61,23 +60,15 @@ def findFallBackSync(verbose: bool = False):
     with requests.Session() as session:
         n = 0
         for n, url in enumerate(_FALLBACKS, 1):
-            if verbose:
-                print(f"Trying service {n}/{len(_FALLBACKS)}",end="\r")
             try:
                 response = session.post(url+"/documents", data="")
             except:
-                if verbose:
-                    print(f"Service {n}/{len(_FALLBACKS)} failed. trying again.", end="\r")
                 continue
             if response.status_code != 200:
                 continue
             else:
-                if verbose:
-                    print(f"{url} ({n}) worked. Using that.")
                 break
         else:
-            if verbose:
-                print("No functional URLs could be found. Are you sure you're online?")
             raise NoFallbacks()
         return url
 
@@ -87,23 +78,15 @@ async def findFallBackAsync(verbose: bool = False):
         raise RuntimeError("You need to install aiohttp to be able to use findFallBackAsync.")
     async with aiohttp.ClientSession() as session:
         for n, url in enumerate(_FALLBACKS, 1):
-            if verbose:
-                print(f"Trying service {n}/{len(_FALLBACKS)} (URL {url})",end="\r")
             try:
                 async with session.post(url+"/documents", data="") as response:
                     if response.status != 200:
                         continue
                     else:
-                        if verbose:
-                            print(f"{url} ({n}) worked. Using that.")
                         return url
             except:
-                if verbose:
-                    print(f"Service {n}/{len(_FALLBACKS)} failed. trying again.", end="\r")
                 continue
         else:
-            if verbose:
-                print("No functional URLs could be found. Are you sure you're online?")
             raise NoFallbacks()
 
 
