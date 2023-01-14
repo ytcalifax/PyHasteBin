@@ -25,13 +25,10 @@ import time
 import asyncio
 
 _FALLBACKS = [
-    "https://paste.pythondiscord.com",
-    "https://hastebin.com",
     "https://haste.unbelievaboat.com",
-    "https://mystb.in",
-    "https://haste.clicksminuteper.net",
-    "https://hst.sh",
-    "https://hasteb.in"
+    "https://paste.pythondiscord.com",
+    "https://hastebin.com",    
+    "https://mystb.in"
 ]
 #_HASTE_URLS_FOR_REGEX = '|'.join(_FALLBACKS[8:]).replace(".", "\\.")
 # _HASTE_URLS_RAW = "(https://|http://)?({})/(raw/)?(?P<key>.+)".format(_HASTE_URLS_FOR_REGEX)
