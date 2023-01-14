@@ -25,11 +25,11 @@ import time
 import asyncio
 
 _FALLBACKS = [
-    "https://haste.clicksminuteper.net",
     "https://paste.pythondiscord.com",
+    "https://hastebin.com",
     "https://haste.unbelievaboat.com",
     "https://mystb.in",
-    "https://hastebin.com",
+    "https://haste.clicksminuteper.net",
     "https://hst.sh",
     "https://hasteb.in"
 ]
@@ -56,7 +56,7 @@ class NoMoreRetries(NoFallbacks):
     """Raised when we ran out of attempts to post."""
 
 
-def findFallBackSync(verbose: bool = True):
+def findFallBackSync(verbose: bool = False):
     """Tries to find a fallback URL, if haste.clicksminuteper.net isn't working."""
     if not requests:
         raise RuntimeError("You need to install requests to be able to use findFallBackSync.")
@@ -83,7 +83,7 @@ def findFallBackSync(verbose: bool = True):
             raise NoFallbacks()
         return url
 
-async def findFallBackAsync(verbose: bool = True):
+async def findFallBackAsync(verbose: bool = False):
     """Same as findFallBackSync, but just async."""
     if not aiohttp:
         raise RuntimeError("You need to install aiohttp to be able to use findFallBackAsync.")
@@ -150,30 +150,26 @@ def postSync(content:  str, *, url: str = None, retry: int = 5, find_fallback_on
         raise RuntimeError("requests must be installed if you want to be able to run postSync.")
     if not isinstance(content, str):
         content = repr(content)
-    url = url or "https://haste.clicksminuteper.net"
+    url = url or _FALLBACKS[0]
     with requests.Session() as session:
         try:
             response = session.post(url+"/documents", data=content)
             if response.status_code == 503:
-                print(url, "is unavailable. Finding a fallback...")
                 return postSync(content, url=findFallBackSync(True), find_fallback_on_retry_runout=True)
             if response.status_code != 200:
                 raise ResponseError(response)
             if response.headers.get("Content-Type", "").lower() != "application/json":
-                print(url, "is returning an invalid response. Finding a Fallback")
                 return postSync(content, url=findFallBackSync(True), find_fallback_on_retry_runout=True)
             key = response.json()["key"]
         except (requests.ConnectionError, ConnectionError):
             print(url, "is unable. Finding a fallback...")
             return postSync(content, url=findFallBackSync(True), find_fallback_on_retry_runout=True)
         except Exception as e:
-            print(f"Exception while POSTing to {url}/documents: {e}\nFinding a fallback...")
             if retry <= 0:
                 if find_fallback_on_retry_runout:
                     print(url, "is unavailable. Finding a fallback...")
                     return postSync(content, url=findFallBackSync(True), find_fallback_on_retry_runout=True)
                 raise NoMoreRetries()
-            print(f"Error posting. {retry-1} retries left.")
             retry -= 1
             if find_fallback_on_unavailable:
                 return postSync(content, url=url, retry=retry, find_fallback_on_unavailable=True,
@@ -188,17 +184,15 @@ async def postAsync(content: str, *, url: str = None, retry: int = 5, find_fallb
         raise RuntimeError("aiohttp must be installed if you want to be able to run postAsync.")
     if not isinstance(content, str):
         content = repr(content)
-    url = url or "https://haste.clicksminuteper.net"
+    url = url or _FALLBACKS[0]
     async with aiohttp.ClientSession() as session:
         try:
             async with session.post(url+"/documents", data=content) as response:
                 if response.status == 503:
-                    print(url, "is unavailable. Finding a fallback...")
                     return await postAsync(content, url=await findFallBackAsync(True), find_fallback_on_retry_runout=True)
                 if response.status != 200:
                     raise ResponseError(response)
                 if response.headers.get("Content-Type", "").lower() != "application/json":
-                    print(url, "is returning an invalid response. Finding a Fallback")
                     return await postAsync(content, url=await findFallBackAsync(True), find_fallback_on_retry_runout=True)
                 key = (await response.json())["key"]
                 return f"{url}/{key}"
@@ -211,10 +205,8 @@ async def postAsync(content: str, *, url: str = None, retry: int = 5, find_fallb
             print(e)
             if retry <= 0:
                 if find_fallback_on_retry_runout:
-                    print(url, "is unavailable. Finding a fallback...")
                     return await postAsync(content, url=await findFallBackAsync(True), find_fallback_on_retry_runout=True)
                 raise NoMoreRetries()
-            print(f"Error posting. {retry-1} retries left.")
             retry -= 1
             # return await postAsync(content, url=url, retry=retry, find_fallback_on_retry_runout=True)
             if find_fallback_on_unavailable:
