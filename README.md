@@ -1,4 +1,4 @@
-# PyBin (a PostBin fork)
+# PyBin (an improved fork of https://github.com/dragdev-studios/PostBin/)
 A simple package that allows you to post to haste services.
 
 ## Features:
@@ -45,7 +45,7 @@ $ [python3 -m] pip install postbin
 ```
 or from git:
 ```shell script
-$ [python3 -m] pip install git+https://github.com/dragdev-studios/PostBin.git
+$ [python3 -m] pip install git+https://github.com/ytcalifax/PyHasteBin.git
 # OR
 $ git clone https://github.com/dragdev-studios/PostBin.git
 $ cd postbin
