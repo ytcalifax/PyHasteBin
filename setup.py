@@ -4,13 +4,13 @@ try:
     with open("README.md") as rfile:
         long_description = rfile.read()
 except:
-    long_description = "https://github.com/dragdev-studios/postbin (description failed to load)"
+    long_description = "https://github.com/ytcalifax/PyHasteBin (description failed to load)"
 
 setup(
-    name='PostBin',
+    name='PyHasteBin',
     version='1.2.0',
     packages=['postbin', "postbin.v2"],
-    url='https://github.com/dragdev-studios/postbin',
+    url='https://github.com/ytcalifax/PyHasteBin',
     python_requires=">=3.6",
     license='MIT',
     author='EEKIM10',
