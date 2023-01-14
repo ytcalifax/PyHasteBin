@@ -8,7 +8,7 @@ except:
 
 setup(
     name='PyHasteBin',
-    version='1.2.2',
+    version='1.2.3',
     packages=['postbin', "postbin.v2"],
     url='https://github.com/ytcalifax/PyHasteBin',
     python_requires=">=3.6",
