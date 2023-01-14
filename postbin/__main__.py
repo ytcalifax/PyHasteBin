@@ -14,7 +14,6 @@ if path.exists(text):
             text = rfile.read()
     except:
         print("Attempted to open a file, but was unable to. Assuming you didn't want to.")
-print("\nPosting...")
 url = postSync(text, retry=10)
 try:
     import webbrowser
@@ -24,6 +23,5 @@ except ImportError:
     webbrowser = None
     print("Tried to open in browser, but webbrowser was not installed.")
     print()
-print("URL:", url)
 exit(0)
 #
