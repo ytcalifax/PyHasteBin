@@ -8,13 +8,13 @@ except:
 
 setup(
     name='PyHasteBin',
-    version='1.2.1',
+    version='1.2.2',
     packages=['postbin', "postbin.v2"],
     url='https://github.com/ytcalifax/PyHasteBin',
     python_requires=">=3.6",
     license='MIT',
-    author='EEKIM10',
-    author_email='eek@clicksminuteper.net',
+    author='EEKIM10, ytcalifax',
+    author_email='kcustom.businessonly@gmail.com',
     description='A simple two-function program that POSTs to hastebin',
     long_description=open("README.md").read(),
     long_description_content_type='text/markdown',
