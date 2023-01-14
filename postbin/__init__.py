@@ -25,7 +25,6 @@ import time
 import asyncio
 
 _FALLBACKS = [
-    "https://hst.sh/"
     "https://hastebin.com",
     "https://haste.unbelievaboat.com",
     "https://paste.pythondiscord.com"
